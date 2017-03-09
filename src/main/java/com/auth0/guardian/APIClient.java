@@ -18,7 +18,6 @@ class APIClient {
         this(baseUrl, new RequestFactory(client));
     }
 
-
     APIClient(HttpUrl baseUrl, RequestFactory requestFactory) {
         this.baseUrl = baseUrl;
         this.requestFactory = requestFactory;

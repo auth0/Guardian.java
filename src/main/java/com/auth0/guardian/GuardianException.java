@@ -3,6 +3,9 @@ package com.auth0.guardian;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class that wraps server-side or app errors exclusively related to Guardian
+ */
 public class GuardianException extends RuntimeException {
 
     private static final String ERROR_INVALID_OTP = "invalid_otp";
