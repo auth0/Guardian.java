@@ -112,7 +112,7 @@ public class APIClientTest {
 
     @Test
     public void shouldVerifyOTP() throws Exception {
-        server.jsonResponse(MockServer.VERIFY_OTP_VALID, 201);
+        server.emptyResponse();
 
         apiClient
                 .verifyOTP(TRANSACTION_TOKEN, OTP_CODE)

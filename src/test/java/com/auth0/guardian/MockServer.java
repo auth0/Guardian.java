@@ -19,7 +19,6 @@ public class MockServer {
     public static final String START_FLOW_VALID = "src/test/resources/start_flow_valid.json";
     public static final String START_FLOW_CONFIRMED = "src/test/resources/start_flow_confirmed.json";
     public static final String SMS_ENROLL_VALID = "src/test/resources/sms_enroll_valid.json";
-    public static final String VERIFY_OTP_VALID = "src/test/resources/verify_otp_valid.json";
 
     public static final String ERROR_500 = "src/test/resources/error_500.txt";
     public static final String ERROR_INVALID_OTP = "src/test/resources/error_code_invalid_otp.json";
@@ -64,6 +63,13 @@ public class MockServer {
                 .setResponseCode(statusCode)
                 .addHeader("Content-Type", "text/plain")
                 .setBody(readTextFile(path));
+        server.enqueue(response);
+    }
+
+    public void emptyResponse() throws IOException {
+        MockResponse response = new MockResponse()
+                .setResponseCode(204)
+                .addHeader("Content-Type", "application/json");
         server.enqueue(response);
     }
 

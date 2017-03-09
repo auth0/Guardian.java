@@ -4,6 +4,7 @@ import com.auth0.guardian.networking.Request;
 import com.auth0.guardian.networking.RequestFactory;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 class APIClient {
 
@@ -11,7 +12,7 @@ class APIClient {
     private final RequestFactory requestFactory;
 
     APIClient(HttpUrl baseUrl) {
-        this(baseUrl, new OkHttpClient());
+        this(baseUrl, new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)).build());
     }
 
     APIClient(HttpUrl baseUrl, OkHttpClient client) {
@@ -30,16 +31,16 @@ class APIClient {
                 .setParameter("state_transport", "polling");
     }
 
-    Request<Object> sendEnrollSMS(String transactionToken, String deviceAccountId, String phoneNumber) {
+    Request<Void> sendEnrollSMS(String transactionToken, String deviceAccountId, String phoneNumber) {
         return requestFactory
-                .newRequest("POST", baseUrl.resolve(String.format("api/device-accounts/%s/sms-enroll", deviceAccountId)), Object.class)
+                .newRequest("POST", baseUrl.resolve(String.format("api/device-accounts/%s/sms-enroll", deviceAccountId)), Void.class)
                 .setHeader("Authorization", String.format("Bearer %s", transactionToken))
                 .setParameter("phone_number", phoneNumber);
     }
 
-    Request<Object> verifyOTP(String transactionToken, String otp) {
+    Request<Void> verifyOTP(String transactionToken, String otp) {
         return requestFactory
-                .newRequest("POST", baseUrl.resolve("api/verify-otp"), Object.class)
+                .newRequest("POST", baseUrl.resolve("api/verify-otp"), Void.class)
                 .setHeader("Authorization", String.format("Bearer %s", transactionToken))
                 .setParameter("type", "manual_input")
                 .setParameter("code", otp);

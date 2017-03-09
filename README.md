@@ -26,6 +26,108 @@ or Gradle:
 compile 'com.auth0:guardian:0.0.1'
 ```
 
+## Usage
+
+Create an instance of `Guardian` using you Guardian URL:
+
+```java
+Guardian guardian = new Guardian("https://nikolaseu-test.guardian.eu.auth0.com");
+```
+
+Obtain an enrollment ticket from API2:
+
+```java
+String enrollmentTicket = "Ag1qX7vZVBvyTKhFwrkzaCH2M8vn5b6c";
+```
+
+### Enrollment
+
+#### TOTP
+
+Use the ticket and `EnrollmentType.TOTP()` to request an TOTP enrollment.
+For TOTP you must ask for the TOTP URI to show to the user in the QR code.
+
+```java
+Transaction enrollmentTransaction;
+try {
+    enrollmentTransaction = guardian
+            .requestEnroll(enrollmentTicket, EnrollmentType.TOTP());
+
+    // Only for TOTP: use the TOTP URI to create a QR and scan with an app
+    String totpURI = enrollmentTransaction.totpURI("Username", "Issuer");
+    System.out.println(totpURI);
+
+} catch (IOException e) {
+    // connection issue, might be internet (or invalid certificates for example)
+} catch (GuardianException e) {
+    if (e.isAlreadyEnrolled()) {
+        // the user was already enrolled
+    } else if (e.isInvalidToken()) {
+        // the ticket is not valid anymore, or was already used
+    } else {
+        // some other guardian error, check the message
+    }
+}
+```
+
+#### SMS
+
+For SMS use `EnrollmentType.SMS()` and the phone number instead:
+
+```java
+Transaction enrollmentTransaction;
+try {
+    enrollmentTransaction = guardian
+            .requestEnroll(enrollmentTicket, EnrollmentType.SMS("+5493424217158"));
+
+} catch (IOException e) {
+    // connection issue, might be internet (or invalid certificates for example)
+} catch (GuardianException e) {
+    if (e.isAlreadyEnrolled()) {
+        // the user was already enrolled
+    } else if (e.isInvalidToken()) {
+        // the ticket is not valid anymore, or was already used
+    } else {
+        // some other guardian error, check the message
+    }
+}
+```
+
+### Transaction storage
+
+`Transaction` implements `java.io.Serializable` interface so you can save and restore it easily.
+
+### Confirm enrollment
+
+Restore the enrollment transaction from wherever you saved it, and use it together with the OTP that the user inputs to
+confirm the enrollment, whether it's TOTP or SMS.
+
+If the OTP was valid, the enrollment is confirmed and you get an object that contains the recovery code.
+
+```java
+// get the OTP from SMS or TOTP app
+String code = "123456";
+
+try {
+    Enrollment enrollment = guardian.confirmEnroll(enrollmentTransaction, code);
+
+    // Get the recovery code and show to the user
+    String recoveryCode = enrollment.getRecoveryCode();
+    System.out.println(recoveryCode);
+
+} catch (IOException e) {
+    // connection issue, might be internet (or invalid certificates for example)
+} catch (GuardianException e) {
+    if (e.isInvalidToken()) {
+        // the transaction is not valid anymore
+    } else if (e.isInvalidOTP()) {
+        // the OTP is not valid
+    } else {
+        // some other guardian error, check the message
+    }
+}
+```
+
 ## Documentation
 
 For more information about [auth0](http://auth0.com) check our [documentation page](http://docs.auth0.com/).

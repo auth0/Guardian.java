@@ -112,6 +112,12 @@ public class Request<T> {
 
     private T payloadFromResponse(Response response) throws GuardianException {
         try {
+            if (response.code() == 204 || Void.class.equals(typeOfT)) {
+                // 204 == No content
+                // Void used when we don't care about the response data
+                return null;
+            }
+
             final Reader reader = response.body().charStream();
             return converter.parse(typeOfT, reader);
         } catch (Exception e) {

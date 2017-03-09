@@ -115,7 +115,7 @@ public class GuardianTest {
     @Test
     public void shouldConfirmEnroll() throws Exception {
         server.jsonResponse(MockServer.START_FLOW_VALID, 201);
-        server.jsonResponse(MockServer.VERIFY_OTP_VALID, 201);
+        server.emptyResponse();
 
         Transaction transaction = guardian
                 .requestEnroll(ENROLLMENT_TICKET, EnrollmentType.TOTP());
@@ -148,7 +148,7 @@ public class GuardianTest {
     @Test
     public void shouldConfirmEnrollAfterSerialization() throws Exception {
         server.jsonResponse(MockServer.START_FLOW_VALID, 201);
-        server.jsonResponse(MockServer.VERIFY_OTP_VALID, 201);
+        server.emptyResponse();
 
         Transaction transaction = guardian
                 .requestEnroll(ENROLLMENT_TICKET, EnrollmentType.TOTP());
@@ -216,7 +216,7 @@ public class GuardianTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid enrollment transaction");
 
-        server.jsonResponse(MockServer.VERIFY_OTP_VALID, 201);
+        server.emptyResponse();
 
         guardian
                 .confirmEnroll(null, OTP_CODE);
@@ -227,7 +227,7 @@ public class GuardianTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid enrollment transaction");
 
-        server.jsonResponse(MockServer.VERIFY_OTP_VALID, 201);
+        server.emptyResponse();
 
         guardian
                 .confirmEnroll(new Transaction(null, null, null), OTP_CODE);
@@ -238,7 +238,7 @@ public class GuardianTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid OTP");
 
-        server.jsonResponse(MockServer.VERIFY_OTP_VALID, 201);
+        server.emptyResponse();
 
         guardian
                 .confirmEnroll(new Transaction("TRANSACTION_TOKEN", null, null), null);
