@@ -1,0 +1,23 @@
+{
+  "device_account": {
+    "id": "THE_ENROLLMENT_ID",
+    "status": "confirmation_pending",
+    "name": "THE_ENROLLMENT_NAME",
+    "otp_secret": "THE_OTP_SECRET",
+    "recovery_code": "THE_RECOVERY_CODE",
+    "phone_number": "54911234567",
+    "push_notifications": {
+      "enabled": false
+    }
+  },
+  "enrollment_tx_id": "THE_ENROLLMENT_TX_ID",
+  "transaction_token": "THE_TRANSACTION_TOKEN",
+  "feature_switches": {
+    "mfa_app": {
+      "enroll": true
+    },
+    "mfa_sms": {
+      "enroll": true
+    }
+  }
+}

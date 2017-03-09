@@ -1,0 +1,8 @@
+{
+  "device_account": {
+    "id": "THE_ENROLLMENT_ID",
+    "status": "confirmed",
+    "phone_number": "54XXXXX4567"
+  },
+  "transaction_token": "THE_TRANSACTION_TOKEN"
+}
