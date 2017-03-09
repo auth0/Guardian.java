@@ -24,9 +24,9 @@ class APIClient {
         this.requestFactory = requestFactory;
     }
 
-    Request<TransactionInfo> startFlow(String ticket) {
+    Request<StartFlowResponse> startFlow(String ticket) {
         return requestFactory
-                .newRequest("POST", baseUrl.resolve("api/start-flow"), TransactionInfo.class)
+                .newRequest("POST", baseUrl.resolve("api/start-flow"), StartFlowResponse.class)
                 .setHeader("Authorization", String.format("Ticket id=\"%s\"", ticket))
                 .setParameter("state_transport", "polling");
     }

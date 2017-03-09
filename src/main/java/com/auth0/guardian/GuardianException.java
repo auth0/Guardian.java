@@ -16,12 +16,6 @@ public class GuardianException extends RuntimeException {
     private final Map<String, Object> errorResponse;
     private final String errorCode;
 
-    public GuardianException(String detailMessage) {
-        super(detailMessage);
-        this.errorCode = null;
-        this.errorResponse = null;
-    }
-
     public GuardianException(String detailMessage, Throwable throwable) {
         super(detailMessage, throwable);
         this.errorCode = null;

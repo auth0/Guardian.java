@@ -32,7 +32,7 @@ class JsonConverter {
         return mapper.readValue(reader, typeReference);
     }
 
-    <K,V> Map<K,V> parseMap(Class<K> classOfKey, Class<V> classOfValue, Reader reader) throws IOException {
+    <K, V> Map<K, V> parseMap(Class<K> classOfKey, Class<V> classOfValue, Reader reader) throws IOException {
         MapType mapType = mapper.getTypeFactory().constructMapType(HashMap.class, classOfKey, classOfValue);
         return mapper.readValue(reader, mapType);
     }

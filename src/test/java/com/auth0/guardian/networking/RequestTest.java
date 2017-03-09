@@ -2,6 +2,7 @@ package com.auth0.guardian.networking;
 
 import com.auth0.guardian.GuardianException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,22 +16,12 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.junit.Assert.*;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class RequestTest {
@@ -40,7 +31,7 @@ public class RequestTest {
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public ExpectedException exception = ExpectedException.none();
 
     @Mock
     private JsonConverter converter;
@@ -155,7 +146,7 @@ public class RequestTest {
 
     @Test
     public void shouldFailGetWithBody() throws Exception {
-        thrown.expect(IllegalArgumentException.class);
+        exception.expect(IllegalArgumentException.class);
 
         getRequest("GET", getUrl("/user/123"))
                 .setParameter("some", "parameter")
@@ -208,7 +199,7 @@ public class RequestTest {
 
     @Test
     public void shouldFailPatchWithEmptyBody() throws Exception {
-        thrown.expect(IllegalArgumentException.class);
+        exception.expect(IllegalArgumentException.class);
 
         getRequest("PATCH", getUrl("/user/123"))
                 .execute();
@@ -229,7 +220,7 @@ public class RequestTest {
 
     @Test
     public void shouldFailPostWithEmptyBody() throws Exception {
-        thrown.expect(IllegalArgumentException.class);
+        exception.expect(IllegalArgumentException.class);
 
         getRequest("POST", getUrl("/user/123"))
                 .execute();
@@ -250,7 +241,7 @@ public class RequestTest {
 
     @Test
     public void shouldFailPutWithEmptyBody() throws Exception {
-        thrown.expect(IllegalArgumentException.class);
+        exception.expect(IllegalArgumentException.class);
 
         getRequest("PUT", getUrl("/user/123"))
                 .execute();
@@ -313,7 +304,7 @@ public class RequestTest {
 
     @Test
     public void shouldFailWhenAddingParametersAndAlreadyHadBody() throws Exception {
-        thrown.expect(IllegalArgumentException.class);
+        exception.expect(IllegalArgumentException.class);
 
         getRequest("PUT", getUrl("/user/123"))
                 .setBody(BODY)
@@ -343,6 +334,40 @@ public class RequestTest {
 
         assertThat(request.method(), is(equalTo("PUT")));
         assertThat(request.url().encodedPath(), is(equalTo("/user/123")));
+    }
+
+    @Test
+    public void shouldAddQueryParameter() throws Exception {
+        getRequest("GET", getUrl("/user/123"))
+                .setQueryParameter("string", "value")
+                .setQueryParameter("number", String.valueOf(123))
+                .setQueryParameter("boolean", String.valueOf(true))
+                .execute();
+
+        verify(client).newCall(requestCaptor.capture());
+        okhttp3.Request request = requestCaptor.getValue();
+
+        assertThat(request.url().queryParameter("string"), is(equalTo("value")));
+        assertThat(request.url().queryParameter("number"), is(equalTo("123")));
+        assertThat(request.url().queryParameter("boolean"), is(equalTo("true")));
+    }
+
+    @Test
+    public void shouldAddQueryParameterAndRemoveItWhenNull() throws Exception {
+        getRequest("GET", getUrl("/user/123"))
+                .setQueryParameter("string", "value")
+                .setQueryParameter("number", String.valueOf(123))
+                .setQueryParameter("boolean", String.valueOf(true))
+                .setQueryParameter("string", null)
+                .execute();
+
+        verify(client).newCall(requestCaptor.capture());
+        okhttp3.Request request = requestCaptor.getValue();
+
+        assertThat(request.url().queryParameter("string"), is(nullValue()));
+        assertThat(request.url().queryParameter("number"), is(equalTo("123")));
+        assertThat(request.url().queryParameter("boolean"), is(equalTo("true")));
+        assertThat(request.url().querySize(), is(equalTo(2)));
     }
 
     @Test
@@ -427,7 +452,7 @@ public class RequestTest {
 
     @Test
     public void shouldFailParseWithSuccessResponse() throws Exception {
-        thrown.expect(GuardianException.class);
+        exception.expect(GuardianException.class);
 
         when(call.execute())
                 .thenReturn(successResponse);
@@ -441,7 +466,7 @@ public class RequestTest {
 
     @Test
     public void shouldFailParseWithErrorResponse() throws Exception {
-        thrown.expect(GuardianException.class);
+        exception.expect(GuardianException.class);
 
         when(call.execute())
                 .thenReturn(errorResponse);

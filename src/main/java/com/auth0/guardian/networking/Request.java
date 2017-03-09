@@ -1,18 +1,13 @@
 package com.auth0.guardian.networking;
 
+import com.auth0.guardian.GuardianException;
+import okhttp3.*;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.auth0.guardian.GuardianException;
-import okhttp3.Call;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class Request<T> {
 
@@ -53,6 +48,15 @@ public class Request<T> {
             bodyParameters.put(name, value);
         } else {
             bodyParameters.remove(name);
+        }
+        return this;
+    }
+
+    public Request<T> setQueryParameter(String name, String value) {
+        if (value != null) {
+            queryParameters.put(name, value);
+        } else {
+            queryParameters.remove(name);
         }
         return this;
     }

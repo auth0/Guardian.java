@@ -12,12 +12,10 @@ import java.util.Map;
 import static com.auth0.guardian.MockServer.bodyFromRequest;
 import static com.auth0.guardian.RecordedRequestMatcher.hasHeader;
 import static com.auth0.guardian.RecordedRequestMatcher.hasMethodAndPath;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class APIClientTest {
 
@@ -48,7 +46,7 @@ public class APIClientTest {
     public void shouldStartFlow() throws Exception {
         server.jsonResponse(MockServer.START_FLOW_VALID, 201);
 
-        TransactionInfo transactionInfo = apiClient
+        StartFlowResponse startFlowResponse = apiClient
                 .startFlow(ENROLLMENT_TICKET)
                 .execute();
 
@@ -61,19 +59,19 @@ public class APIClientTest {
         Map<String, Object> body = bodyFromRequest(recordedRequest);
         assertThat(body, hasEntry("state_transport", (Object) "polling"));
 
-        assertThat(transactionInfo.getTransactionToken(), is(equalTo("THE_TRANSACTION_TOKEN")));
-        assertThat(transactionInfo.getDeviceAccount(), is(notNullValue()));
-        assertThat(transactionInfo.getDeviceAccount().getId(), is(equalTo("THE_ENROLLMENT_ID")));
-        assertThat(transactionInfo.getDeviceAccount().getStatus(), is(equalTo("confirmation_pending")));
-        assertThat(transactionInfo.getDeviceAccount().getOtpSecret(), is(equalTo("THE_OTP_SECRET")));
-        assertThat(transactionInfo.getDeviceAccount().getRecoveryCode(), is(equalTo("THE_RECOVERY_CODE")));
+        assertThat(startFlowResponse.getTransactionToken(), is(equalTo("THE_TRANSACTION_TOKEN")));
+        assertThat(startFlowResponse.getDeviceAccount(), is(notNullValue()));
+        assertThat(startFlowResponse.getDeviceAccount().getId(), is(equalTo("THE_ENROLLMENT_ID")));
+        assertThat(startFlowResponse.getDeviceAccount().getStatus(), is(equalTo("confirmation_pending")));
+        assertThat(startFlowResponse.getDeviceAccount().getOtpSecret(), is(equalTo("THE_OTP_SECRET")));
+        assertThat(startFlowResponse.getDeviceAccount().getRecoveryCode(), is(equalTo("THE_RECOVERY_CODE")));
     }
 
     @Test
     public void shouldStartFlowAlreadyEnrolled() throws Exception {
         server.jsonResponse(MockServer.START_FLOW_CONFIRMED, 201);
 
-        TransactionInfo transactionInfo = apiClient
+        StartFlowResponse startFlowResponse = apiClient
                 .startFlow(ENROLLMENT_TICKET)
                 .execute();
 
@@ -86,12 +84,12 @@ public class APIClientTest {
         Map<String, Object> body = bodyFromRequest(recordedRequest);
         assertThat(body, hasEntry("state_transport", (Object) "polling"));
 
-        assertThat(transactionInfo.getTransactionToken(), is(equalTo("THE_TRANSACTION_TOKEN")));
-        assertThat(transactionInfo.getDeviceAccount(), is(notNullValue()));
-        assertThat(transactionInfo.getDeviceAccount().getId(), is(equalTo("THE_ENROLLMENT_ID")));
-        assertThat(transactionInfo.getDeviceAccount().getStatus(), is(equalTo("confirmed")));
-        assertThat(transactionInfo.getDeviceAccount().getOtpSecret(), is(nullValue()));
-        assertThat(transactionInfo.getDeviceAccount().getRecoveryCode(), is(nullValue()));
+        assertThat(startFlowResponse.getTransactionToken(), is(equalTo("THE_TRANSACTION_TOKEN")));
+        assertThat(startFlowResponse.getDeviceAccount(), is(notNullValue()));
+        assertThat(startFlowResponse.getDeviceAccount().getId(), is(equalTo("THE_ENROLLMENT_ID")));
+        assertThat(startFlowResponse.getDeviceAccount().getStatus(), is(equalTo("confirmed")));
+        assertThat(startFlowResponse.getDeviceAccount().getOtpSecret(), is(nullValue()));
+        assertThat(startFlowResponse.getDeviceAccount().getRecoveryCode(), is(nullValue()));
     }
 
     @Test
@@ -155,6 +153,7 @@ public class APIClientTest {
                     .sendEnrollSMS(TRANSACTION_TOKEN, DEVICE_ACCOUNT_ID, PHONE_NUMBER)
                     .execute();
         } catch (GuardianException e) {
+            assertThat(e.getErrorCode(), is(equalTo("device_account_not_found")));
             assertThat(e.isEnrollmentNotFound(), is(equalTo(true)));
             throw e;
         }
@@ -172,6 +171,7 @@ public class APIClientTest {
                     .sendEnrollSMS(TRANSACTION_TOKEN, DEVICE_ACCOUNT_ID, PHONE_NUMBER)
                     .execute();
         } catch (GuardianException e) {
+            assertThat(e.getErrorCode(), is(equalTo("enrollment_not_found")));
             assertThat(e.isEnrollmentNotFound(), is(equalTo(true)));
             throw e;
         }
@@ -189,6 +189,7 @@ public class APIClientTest {
                     .sendEnrollSMS(TRANSACTION_TOKEN, DEVICE_ACCOUNT_ID, PHONE_NUMBER)
                     .execute();
         } catch (GuardianException e) {
+            assertThat(e.getErrorCode(), is(equalTo("login_transaction_not_found")));
             assertThat(e.isLoginTransactionNotFound(), is(equalTo(true)));
             throw e;
         }
@@ -206,6 +207,7 @@ public class APIClientTest {
                     .verifyOTP(TRANSACTION_TOKEN, OTP_CODE)
                     .execute();
         } catch (GuardianException e) {
+            assertThat(e.getErrorCode(), is(equalTo("invalid_otp")));
             assertThat(e.isInvalidOTP(), is(equalTo(true)));
             throw e;
         }
@@ -223,6 +225,7 @@ public class APIClientTest {
                     .verifyOTP(TRANSACTION_TOKEN, OTP_CODE)
                     .execute();
         } catch (GuardianException e) {
+            assertThat(e.getErrorCode(), is(equalTo("invalid_token")));
             assertThat(e.isInvalidToken(), is(equalTo(true)));
             throw e;
         }

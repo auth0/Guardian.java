@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class TransactionInfo {
+class StartFlowResponse {
 
     @JsonProperty("transaction_token")
     private String transactionToken;

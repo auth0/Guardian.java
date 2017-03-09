@@ -14,7 +14,6 @@ public class RecordedRequestMatcher extends TypeSafeDiagnosingMatcher<RecordedRe
     private final String first;
     private final String second;
 
-
     private RecordedRequestMatcher(String first, String second, int checkingOption) {
         this.checkingOption = checkingOption;
         this.first = first;
