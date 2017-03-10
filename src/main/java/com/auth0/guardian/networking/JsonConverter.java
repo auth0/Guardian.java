@@ -23,15 +23,10 @@
 package com.auth0.guardian.networking;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 class JsonConverter {
 
@@ -49,13 +44,7 @@ class JsonConverter {
         }
     }
 
-    <T> T parse(Type typeOfT, Reader reader) throws IOException {
-        JavaType typeReference = mapper.getTypeFactory().constructType(typeOfT);
-        return mapper.readValue(reader, typeReference);
-    }
-
-    <K, V> Map<K, V> parseMap(Class<K> classOfKey, Class<V> classOfValue, Reader reader) throws IOException {
-        MapType mapType = mapper.getTypeFactory().constructMapType(HashMap.class, classOfKey, classOfValue);
-        return mapper.readValue(reader, mapType);
+    <T> T parse(Class<T> classOfT, Reader reader) throws IOException {
+        return mapper.readValue(reader, classOfT);
     }
 }

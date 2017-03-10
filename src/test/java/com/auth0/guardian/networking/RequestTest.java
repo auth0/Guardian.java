@@ -23,7 +23,6 @@
 package com.auth0.guardian.networking;
 
 import com.auth0.guardian.GuardianException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,7 +33,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,8 +109,7 @@ public class RequestTest {
     }
 
     private Request<Object> getRequest(String method, String url) {
-        Type type = new ObjectMapper().getTypeFactory().constructSimpleType(Object.class, null);
-        return new Request<>(method, HttpUrl.parse(url), converter, client, type);
+        return new Request<>(method, HttpUrl.parse(url), converter, client, Object.class);
     }
 
     private String getUrl(String path) {
@@ -193,7 +190,7 @@ public class RequestTest {
                 .execute();
 
         verify(converter).serialize(mapCaptor.capture());
-        verify(converter).parse(any(Type.class), any(Reader.class));
+        verify(converter).parse(any(Class.class), any(Reader.class));
         verifyNoMoreInteractions(converter);
         Map<String, Object> body = mapCaptor.getValue();
         assertThat(body, hasEntry("some", (Object) "parameter"));
@@ -273,7 +270,7 @@ public class RequestTest {
         getRequest("GET", getUrl("/user/123"))
                 .execute();
 
-        verify(converter).parse(any(Type.class), any(Reader.class));
+        verify(converter).parse(any(Class.class), any(Reader.class));
         verifyNoMoreInteractions(converter);
 
         verify(client).newCall(requestCaptor.capture());
@@ -292,7 +289,7 @@ public class RequestTest {
                 .execute();
 
         verify(converter).serialize(mapCaptor.capture());
-        verify(converter).parse(any(Type.class), any(Reader.class));
+        verify(converter).parse(any(Class.class), any(Reader.class));
         verifyNoMoreInteractions(converter);
         Map<String, Object> body = mapCaptor.getValue();
         assertThat(body, hasEntry("string", (Object) "value"));
@@ -343,7 +340,7 @@ public class RequestTest {
                 .execute();
 
         verify(converter).serialize(mapCaptor.capture());
-        verify(converter).parse(any(Type.class), any(Reader.class));
+        verify(converter).parse(any(Class.class), any(Reader.class));
         verifyNoMoreInteractions(converter);
         Map<String, Object> body = mapCaptor.getValue();
         assertThat(body, hasEntry("number", (Object) 123));
@@ -436,14 +433,14 @@ public class RequestTest {
 
         Object parsedResponse = new Object();
 
-        when(converter.parse(any(Type.class), any(Reader.class)))
+        when(converter.parse(any(Class.class), any(Reader.class)))
                 .thenReturn(parsedResponse);
 
         Object response = getRequest("GET", getUrl("/user/123"))
                 .execute();
         assertThat(response, is(sameInstance(parsedResponse)));
 
-        verify(converter).parse(any(Type.class), any(Reader.class));
+        verify(converter).parse(any(Class.class), any(Reader.class));
     }
 
     @Test
@@ -454,7 +451,7 @@ public class RequestTest {
         Map<String, String> parsedErrorResponse = new HashMap<>();
         parsedErrorResponse.put("errorCode", "invalid_token");
 
-        when(converter.parse(any(Type.class), any(Reader.class)))
+        when(converter.parse(any(Class.class), any(Reader.class)))
                 .thenReturn(parsedErrorResponse);
 
         Exception thrownException = null;
@@ -465,7 +462,7 @@ public class RequestTest {
             thrownException = error;
         }
 
-        verify(converter).parseMap(eq(String.class), eq(Object.class), any(Reader.class));
+        verify(converter).parse(eq(Map.class), any(Reader.class));
 
         assertThat(thrownException, is(notNullValue()));
         assertThat(thrownException, is(instanceOf(GuardianException.class)));
@@ -478,7 +475,7 @@ public class RequestTest {
         when(call.execute())
                 .thenReturn(successResponse);
 
-        when(converter.parse(any(Type.class), any(Reader.class)))
+        when(converter.parse(any(Class.class), any(Reader.class)))
                 .thenThrow(new RuntimeException());
 
         getRequest("GET", getUrl("/something"))
@@ -492,7 +489,7 @@ public class RequestTest {
         when(call.execute())
                 .thenReturn(errorResponse);
 
-        when(converter.parse(any(Type.class), any(Reader.class)))
+        when(converter.parse(any(Class.class), any(Reader.class)))
                 .thenThrow(new RuntimeException());
 
         getRequest("GET", getUrl("/something"))

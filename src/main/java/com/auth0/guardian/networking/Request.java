@@ -27,7 +27,6 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class Request<T> {
 
     private final JsonConverter converter;
     private final OkHttpClient client;
-    private final Type typeOfT;
+    private final Class<T> classOfT;
     private final HttpUrl url;
     private final String method;
 
@@ -50,12 +49,12 @@ public class Request<T> {
             HttpUrl url,
             JsonConverter converter,
             OkHttpClient client,
-            Type typeOfT) {
+            Class<T> classOfT) {
         this.method = method;
         this.url = url;
         this.converter = converter;
         this.client = client;
-        this.typeOfT = typeOfT;
+        this.classOfT = classOfT;
 
         this.headers = new HashMap<>();
         this.bodyParameters = new HashMap<>();
@@ -134,14 +133,14 @@ public class Request<T> {
 
     private T payloadFromResponse(Response response) throws GuardianException {
         try {
-            if (response.code() == 204 || Void.class.equals(typeOfT)) {
+            if (response.code() == 204 || Void.class.equals(classOfT)) {
                 // 204 == No content
                 // Void used when we don't care about the response data
                 return null;
             }
 
             final Reader reader = response.body().charStream();
-            return converter.parse(typeOfT, reader);
+            return converter.parse(classOfT, reader);
         } catch (Exception e) {
             throw new GuardianException("Error parsing server response", e);
         }
@@ -150,7 +149,7 @@ public class Request<T> {
     private GuardianException exceptionFromErrorResponse(Response response) {
         try {
             final Reader reader = response.body().charStream();
-            Map<String, Object> error = converter.parseMap(String.class, Object.class, reader);
+            Map<String, Object> error = converter.parse(Map.class, reader);
             return new GuardianException(error);
         } catch (Exception e) {
             return new GuardianException("Error parsing server error response", e);

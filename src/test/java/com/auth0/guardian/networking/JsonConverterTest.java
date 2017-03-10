@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.StringReader;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,15 +88,7 @@ public class JsonConverterTest {
 
     @Test
     public void shouldParseGenericMap() throws Exception {
-        Type type = mapper.getTypeFactory().constructMapType(HashMap.class, Object.class, Object.class);
-        Map<Object, Object> parsed = converter.parse(type, new StringReader("{\"someString\":\"theStringValue\",\"someNumber\":123.3}"));
-        assertThat(parsed, hasEntry("someString", (Object) "theStringValue"));
-        assertThat(parsed, hasEntry("someNumber", (Object) 123.3));
-    }
-
-    @Test
-    public void shouldParseMap() throws Exception {
-        Map<String, Object> parsed = converter.parseMap(String.class, Object.class, new StringReader("{\"someString\":\"theStringValue\",\"someNumber\":123.3}"));
+        Map<Object, Object> parsed = converter.parse(Map.class, new StringReader("{\"someString\":\"theStringValue\",\"someNumber\":123.3}"));
         assertThat(parsed, hasEntry("someString", (Object) "theStringValue"));
         assertThat(parsed, hasEntry("someNumber", (Object) 123.3));
     }
