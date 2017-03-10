@@ -41,9 +41,9 @@ class JsonConverter {
         this.mapper = mapper;
     }
 
-    String serialize(Object body) throws IllegalArgumentException {
+    byte[] serialize(Object body) throws IllegalArgumentException {
         try {
-            return mapper.writeValueAsString(body);
+            return mapper.writeValueAsBytes(body);
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Couldn't create request body for data: " + body, e);
         }

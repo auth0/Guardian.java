@@ -28,12 +28,12 @@ public class TestApp {
 
     public static void main(String[] args) {
 
-        Guardian guardian = new Guardian("https://nikolaseu-test.guardian.eu.auth0.com");
+        Guardian guardian = new Guardian("https://<tenant>.guardian.auth0.com");
 
         // obtain an enrollment ticket for the user
         String enrollmentTicket = "Ag1qX7vZVBvyTKhFwrkzaCH2M8vn5b6c";
 
-        Transaction enrollmentTransaction;
+        Transaction enrollmentTransaction = null;
         try {
             enrollmentTransaction = guardian
                     //.requestEnroll(enrollmentTicket, EnrollmentType.SMS("+5493424217158"));
@@ -45,7 +45,6 @@ public class TestApp {
 
         } catch (IOException e) {
             // connection issue, might be internet (or invalid certificates for example)
-            return;
         } catch (GuardianException e) {
             if (e.isAlreadyEnrolled()) {
                 // the user was already enrolled
@@ -54,7 +53,6 @@ public class TestApp {
             } else {
                 // some other guardian error, check the message
             }
-            return;
         }
 
         // get the OTP from SMS or TOTP app
@@ -69,7 +67,6 @@ public class TestApp {
 
         } catch (IOException e) {
             // connection issue, might be internet (or invalid certificates for example)
-            return;
         } catch (GuardianException e) {
             if (e.isInvalidToken()) {
                 // the transaction is not valid anymore
@@ -78,7 +75,6 @@ public class TestApp {
             } else {
                 // some other guardian error, check the message
             }
-            return;
         }
     }
 }

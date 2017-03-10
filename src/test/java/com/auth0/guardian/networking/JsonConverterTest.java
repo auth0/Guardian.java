@@ -39,6 +39,8 @@ import static org.junit.Assert.assertThat;
 
 public class JsonConverterTest {
 
+    private static final String JSON_OBJECT_TWO_FIELDS_REGEXP = "\\{\\s*?\\\"\\w+?\\\"\\s*?:\\s*?.+?,\\s*?\\\"\\w+?\\\"\\s*?:\\s*?.+\\s*?\\}";
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -57,8 +59,12 @@ public class JsonConverterTest {
         dummyObject.someString = "theString";
         dummyObject.someInteger = 456;
 
-        String serialized = converter.serialize(dummyObject);
-        assertThat(serialized, is(equalTo("{\"someString\":\"theString\",\"someInteger\":456}")));
+        String serialized = new String(converter.serialize(dummyObject));
+        assertThat(serialized, startsWith("{"));
+        assertThat(serialized, endsWith("}"));
+        assertThat(serialized, matchesPattern(JSON_OBJECT_TWO_FIELDS_REGEXP));
+        assertThat(serialized, containsString("\"someString\":\"theString\""));
+        assertThat(serialized, containsString("\"someInteger\":456"));
     }
 
     @Test
@@ -66,15 +72,17 @@ public class JsonConverterTest {
         Map<String, Object> map = new HashMap<>();
         map.put("someString", "theString");
         map.put("someInteger", 456);
-        String serialized = converter.serialize(map);
+        String serialized = new String(converter.serialize(map));
+        assertThat(serialized, startsWith("{"));
+        assertThat(serialized, endsWith("}"));
+        assertThat(serialized, matchesPattern(JSON_OBJECT_TWO_FIELDS_REGEXP));
         assertThat(serialized, containsString("\"someString\":\"theString\""));
         assertThat(serialized, containsString("\"someInteger\":456"));
     }
 
     @Test
     public void shouldParseClass() throws Exception {
-        Type type = mapper.getTypeFactory().constructSimpleType(DummyObject.class, null);
-        DummyObject parsed = converter.parse(type, new StringReader("{\"someString\":\"theStringValue\",\"someInteger\":123}"));
+        DummyObject parsed = converter.parse(DummyObject.class, new StringReader("{\"someString\":\"theStringValue\",\"someInteger\":123}"));
         assertThat(parsed.someString, is(equalTo("theStringValue")));
         assertThat(parsed.someInteger, is(equalTo(123)));
     }

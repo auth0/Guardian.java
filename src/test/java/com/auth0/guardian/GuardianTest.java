@@ -38,8 +38,7 @@ import java.util.Map;
 import static com.auth0.guardian.MockServer.bodyFromRequest;
 import static com.auth0.guardian.RecordedRequestMatcher.hasHeader;
 import static com.auth0.guardian.RecordedRequestMatcher.hasMethodAndPath;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class GuardianTest {

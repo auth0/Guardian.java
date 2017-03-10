@@ -38,8 +38,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -105,7 +104,7 @@ public class RequestTest {
                 .thenReturn(successResponse);
 
         when(converter.serialize(any(Object.class)))
-                .thenReturn("{}");
+                .thenReturn("{}".getBytes());
 
         when(client.newCall(any(okhttp3.Request.class)))
                 .thenReturn(call);

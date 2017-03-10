@@ -31,7 +31,7 @@ compile 'com.auth0:guardian:0.0.1'
 Create an instance of `Guardian` using you Guardian URL:
 
 ```java
-Guardian guardian = new Guardian("https://nikolaseu-test.guardian.eu.auth0.com");
+Guardian guardian = new Guardian("https://<tenant>.guardian.auth0.com");
 ```
 
 Obtain an enrollment ticket from API2:
