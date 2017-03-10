@@ -7,7 +7,7 @@ logger.lifecycle("Using version ${version} for ${name}")
 
 oss {
     name 'guardian'
-    repository 'guardian-java'
+    repository 'Guardian.java'
     organization 'auth0'
     description 'Java library for Auth0\'s Guardian platform.'
 

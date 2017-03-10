@@ -88,7 +88,7 @@ public class JsonConverterTest {
 
     @Test
     public void shouldParseGenericMap() throws Exception {
-        Map<Object, Object> parsed = converter.parse(Map.class, new StringReader("{\"someString\":\"theStringValue\",\"someNumber\":123.3}"));
+        Map<String, Object> parsed = converter.parse(Map.class, new StringReader("{\"someString\":\"theStringValue\",\"someNumber\":123.3}"));
         assertThat(parsed, hasEntry("someString", (Object) "theStringValue"));
         assertThat(parsed, hasEntry("someNumber", (Object) 123.3));
     }

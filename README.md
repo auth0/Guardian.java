@@ -78,7 +78,7 @@ For SMS use `EnrollmentType.SMS()` and the phone number instead:
 Transaction enrollmentTransaction;
 try {
     enrollmentTransaction = guardian
-            .requestEnroll(enrollmentTicket, EnrollmentType.SMS("+5493424217158"));
+            .requestEnroll(enrollmentTicket, EnrollmentType.SMS("+549XXXXXXXX58"));
 
 } catch (IOException e) {
     // connection issue, might be internet (or invalid certificates for example)
