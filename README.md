@@ -97,6 +97,9 @@ try {
 
 `Transaction` implements `java.io.Serializable` interface so you can save and restore it easily.
 
+> The transaction contains sensitive information like the transaction token and the recovery code. Keep in mind this
+> when considering possible storage options.
+
 ### Confirm enrollment
 
 Restore the enrollment transaction from wherever you saved it, and use it together with the OTP that the user inputs to

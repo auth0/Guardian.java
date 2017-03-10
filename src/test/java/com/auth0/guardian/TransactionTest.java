@@ -49,6 +49,24 @@ public class TransactionTest {
     }
 
     @Test
+    public void shouldCreateCorrectlyWithSpaces() throws Exception {
+        Transaction transaction = new Transaction("TRANSACTION_TOKEN", "RECOVERY_CODE", "OTP_SECRET");
+
+        assertThat(transaction.getTransactionToken(), is(equalTo("TRANSACTION_TOKEN")));
+        assertThat(transaction.getRecoveryCode(), is(equalTo("RECOVERY_CODE")));
+        assertThat(transaction.totpURI("user name", "company name"), is(equalTo("otpauth://totp/company%20name:user%20name?secret=OTP_SECRET&issuer=company%20name")));
+    }
+
+    @Test
+    public void shouldCreateCorrectlyWithWeirdCharacters() throws Exception {
+        Transaction transaction = new Transaction("TRANSACTION_TOKEN", "RECOVERY_CODE", "OTP_SECRET");
+
+        assertThat(transaction.getTransactionToken(), is(equalTo("TRANSACTION_TOKEN")));
+        assertThat(transaction.getRecoveryCode(), is(equalTo("RECOVERY_CODE")));
+        assertThat(transaction.totpURI("user%name", "compañy?!"), is(equalTo("otpauth://totp/compa%C3%B1y%3F!:user%25name?secret=OTP_SECRET&issuer=compa%C3%B1y?!")));
+    }
+
+    @Test
     public void shouldSerializeCorrectly() throws Exception {
         Transaction transaction = new Transaction("TRANSACTION_TOKEN", "RECOVERY_CODE", "OTP_SECRET");
 

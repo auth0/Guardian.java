@@ -22,6 +22,8 @@
 
 package com.auth0.guardian;
 
+import okhttp3.HttpUrl;
+
 import java.io.Serializable;
 
 /**
@@ -30,7 +32,9 @@ import java.io.Serializable;
  * A transaction is created when requesting to enroll. This transaction will be required to confirm the enrollment once
  * the user added his TOTP account or received the SMS with the code.
  * <p>
- * Implements {@code java.io.Serializable} to make it easy to save on the session
+ * Implements {@code java.io.Serializable} to make it easy to save on the session.
+ * The transaction contains sensitive information like the transaction token and the recovery code. Keep in mind this
+ * when considering possible storage options.
  */
 public class Transaction implements Serializable {
 
@@ -65,6 +69,15 @@ public class Transaction implements Serializable {
             throw new IllegalStateException("There is no OTP Secret for this transaction");
         }
 
-        return String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", issuer, user, otpSecret, issuer);
+        // use HttpUrl to build the URI, java.net.URL really sucks
+        return new HttpUrl.Builder()
+                .scheme("https") // HttpUrl only allows http/https so I replace it afterwards
+                .host("totp")
+                .addPathSegment(String.format("%s:%s", issuer, user))
+                .addQueryParameter("secret", otpSecret)
+                .addQueryParameter("issuer", issuer)
+                .build()
+                .toString()
+                .replaceFirst("https", "otpauth"); // replace scheme
     }
 }
