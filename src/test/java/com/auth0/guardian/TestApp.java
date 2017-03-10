@@ -36,7 +36,7 @@ public class TestApp {
         Transaction enrollmentTransaction = null;
         try {
             enrollmentTransaction = guardian
-                    //.requestEnroll(enrollmentTicket, EnrollmentType.SMS("+5493424217158"));
+                    //.requestEnroll(enrollmentTicket, EnrollmentType.SMS("+549XXXXXXXX58"));
                     .requestEnroll(enrollmentTicket, EnrollmentType.TOTP());
 
             // Only for TOTP: use the TOTP URI to create a QR and scan with an app
