@@ -240,7 +240,7 @@ public class GuardianTest {
         server.emptyResponse();
 
         guardian
-                .confirmEnroll(null, OTP_CODE);
+                .confirmEnroll((Transaction)null, OTP_CODE);
     }
 
     @Test
