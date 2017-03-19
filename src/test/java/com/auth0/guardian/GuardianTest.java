@@ -264,4 +264,57 @@ public class GuardianTest {
         guardian
                 .confirmEnroll(new Transaction("TRANSACTION_TOKEN", null, null), null);
     }
+
+    @Test
+    public void shouldConfirmEnrollOverload() throws Exception {
+        server.jsonResponse(MockServer.START_FLOW_VALID, 201);
+        server.emptyResponse();
+
+        Transaction transaction = guardian
+                .requestEnroll(ENROLLMENT_TICKET, EnrollmentType.TOTP());
+
+        guardian
+                .confirmEnroll(transaction.getTransactionToken(), OTP_CODE);
+
+        RecordedRequest startFlowRequest = server.takeRequest();
+
+        assertThat(startFlowRequest, hasMethodAndPath("POST", "/api/start-flow"));
+        assertThat(startFlowRequest, hasHeader("Content-Type", "application/json; charset=utf-8"));
+        assertThat(startFlowRequest, hasHeader("Authorization", "Ticket id=\"ENROLLMENT_TICKET\""));
+
+        Map<String, Object> startFlowBody = bodyFromRequest(startFlowRequest);
+        assertThat(startFlowBody, hasEntry("state_transport", (Object) "polling"));
+
+        RecordedRequest verifyOtpRequest = server.takeRequest();
+
+        assertThat(verifyOtpRequest, hasMethodAndPath("POST", "/api/verify-otp"));
+        assertThat(verifyOtpRequest, hasHeader("Content-Type", "application/json; charset=utf-8"));
+        assertThat(verifyOtpRequest, hasHeader("Authorization", "Bearer THE_TRANSACTION_TOKEN"));
+
+        Map<String, Object> verifyOtpBody = bodyFromRequest(verifyOtpRequest);
+        assertThat(verifyOtpBody, hasEntry("type", (Object) "manual_input"));
+        assertThat(verifyOtpBody, hasEntry("code", (Object) "OTP_CODE"));
+    }
+
+    @Test
+    public void shouldFailConfirmationOverloadWhenNoTokenIsProvided() throws Exception {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid enrollment transaction");
+
+        server.emptyResponse();
+
+        guardian
+                .confirmEnroll((String)null, OTP_CODE);
+    }
+
+    @Test
+    public void shouldFailConfirmationOverloadWhenOtpIsNull() throws Exception {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid OTP");
+
+        server.emptyResponse();
+
+        guardian
+                .confirmEnroll("TRANSACTION_TOKEN", null);
+    }
 }

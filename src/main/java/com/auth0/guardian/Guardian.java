@@ -86,9 +86,6 @@ public class Guardian {
      * transaction initiated with {@link EnrollmentType#TOTP()}) or when the user received the OTP code delivered to his
      * phone number by SMS (for a transaction initiated with {@link EnrollmentType#SMS(String)}).
      *
-     * This method can be used in stateful applications where a {@link Transaction} is preserved in memory between user
-     * interactions.
-     *
      * @param transaction the enrollment transaction
      * @param otp         the code obtained from the TOTP app or delivered to the phone number by SMS
      * @return extra information about the enrollment, like the recovery code
@@ -119,8 +116,8 @@ public class Guardian {
      * transaction initiated with {@link EnrollmentType#TOTP()}) or when the user received the OTP code delivered to his
      * phone number by SMS (for a transaction initiated with {@link EnrollmentType#SMS(String)}).
      *
-     * This method can be used in stateless applications where {@link Transaction} may not be preserved between user
-     * interactions.
+     * This overload is intended for stateless applications where {@link java.io.Serializable} is not acceptable,
+     * avoiding the necessity of utilising poor practises to preserve {@link Transaction} between user actions.
      *
      * @param transactionToken the token associated with the transaction to confirm.
      * @param otp              the code obtained from the TOTP app or delivered to the phone number by SMS
@@ -128,7 +125,7 @@ public class Guardian {
      * @throws IllegalArgumentException when the transaction is not valid
      * @throws GuardianException        when there's a Guardian specific issue (invalid otp for example)
      */
-    public void confirmEnrollStateless(String transactionToken, String otp)
+    public void confirmEnroll(String transactionToken, String otp)
             throws IOException, IllegalArgumentException, GuardianException {
         if (transactionToken == null) {
             throw new IllegalArgumentException("Invalid enrollment transaction");
