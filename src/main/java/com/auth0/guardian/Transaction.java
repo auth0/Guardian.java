@@ -48,11 +48,11 @@ public class Transaction implements Serializable {
         this.otpSecret = otpSecret;
     }
 
-    String getTransactionToken() {
+    public String getTransactionToken() {
         return transactionToken;
     }
 
-    String getRecoveryCode() {
+    public String getRecoveryCode() {
         return recoveryCode;
     }
 

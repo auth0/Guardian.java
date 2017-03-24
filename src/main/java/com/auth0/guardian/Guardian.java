@@ -108,4 +108,34 @@ public class Guardian {
 
         return new Enrollment(transaction.getRecoveryCode());
     }
+
+    /**
+     * Confirms an enrollment started with {@link Guardian#requestEnroll(String, EnrollmentType)}.
+     * <p>
+     * Use this method to confirm an enrollment transaction once the user scanned the QR code with a TOTP app (for a
+     * transaction initiated with {@link EnrollmentType#TOTP()}) or when the user received the OTP code delivered to his
+     * phone number by SMS (for a transaction initiated with {@link EnrollmentType#SMS(String)}).
+     *
+     * This overload is intended for stateless applications where {@link java.io.Serializable} is not acceptable,
+     * avoiding the necessity of utilising poor practises to preserve {@link Transaction} between user actions.
+     *
+     * @param transactionToken the token associated with the transaction to confirm.
+     * @param otp              the code obtained from the TOTP app or delivered to the phone number by SMS
+     * @throws IOException              when there's a connection issue
+     * @throws IllegalArgumentException when the transaction is not valid
+     * @throws GuardianException        when there's a Guardian specific issue (invalid otp for example)
+     */
+    public void confirmEnroll(String transactionToken, String otp)
+            throws IOException, IllegalArgumentException, GuardianException {
+        if (transactionToken == null) {
+            throw new IllegalArgumentException("Invalid enrollment transaction");
+        }
+        if (otp == null) {
+            throw new IllegalArgumentException("Invalid OTP");
+        }
+
+        apiClient
+                .verifyOTP(transactionToken, otp)
+                .execute();
+    }
 }
