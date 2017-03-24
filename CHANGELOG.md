@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.0](https://github.com/auth0/Guardian.java/tree/0.1.0) (2017-03-24)
+[Full Changelog](https://github.com/auth0/Guardian.java/compare/0.0.1...0.1.0)
+
+**Changed**
+- Exposed `protected` Transaction data [\#3](https://github.com/auth0/Guardian.java/pull/3) ([mirichan](https://github.com/mirichan))
+
 ## [0.0.1](https://github.com/auth0/Guardian.java/tree/0.0.1) (2017-03-10)
 
 First release of Guardian for Java

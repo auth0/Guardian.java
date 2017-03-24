@@ -16,14 +16,14 @@ Get Guardian Java via Maven:
 <dependency>
   <groupId>com.auth0</groupId>
   <artifactId>guardian</artifactId>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```gradle
-compile 'com.auth0:guardian:0.0.1'
+compile 'com.auth0:guardian:0.1.0'
 ```
 
 ## Usage
