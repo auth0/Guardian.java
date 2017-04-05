@@ -28,16 +28,16 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-class APIClient {
+public class APIClient {
 
     private final HttpUrl baseUrl;
     private final RequestFactory requestFactory;
 
-    APIClient(HttpUrl baseUrl) {
+    public APIClient(HttpUrl baseUrl) {
         this(baseUrl, new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)).build());
     }
 
-    APIClient(HttpUrl baseUrl, OkHttpClient client) {
+    public APIClient(HttpUrl baseUrl, OkHttpClient client) {
         this(baseUrl, new RequestFactory(client));
     }
 

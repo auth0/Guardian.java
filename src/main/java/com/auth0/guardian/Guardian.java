@@ -35,13 +35,22 @@ public class Guardian {
      *
      * @param baseUrl the Guardian server URL
      */
-    public Guardian(String baseUrl) {
+    public static Guardian fromBaseUrl(String baseUrl) {
         HttpUrl url = HttpUrl.parse(baseUrl);
         if (url == null) {
             throw new IllegalArgumentException("Invalid base URL: " + baseUrl);
         }
 
-        this.apiClient = new APIClient(url);
+        return new Guardian(new APIClient(url));
+    }
+
+    /**
+     * Creates an instance for a specific Guardian API client
+     *
+     * @param apiClient the Guardian API client
+     */
+    public Guardian(APIClient apiClient) {
+        this.apiClient = apiClient;
     }
 
     /**
