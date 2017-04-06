@@ -216,6 +216,24 @@ public class APIClientTest {
     }
 
     @Test
+    public void shouldThrowTransactionNotFound() throws Exception {
+        exception.expect(GuardianException.class);
+        exception.expectMessage("Not found");
+
+        server.jsonResponse(MockServer.ERROR_TRANSACTION_NOT_FOUND, 400);
+
+        try {
+            apiClient
+                    .verifyOTP(TRANSACTION_TOKEN, OTP_CODE)
+                    .execute();
+        } catch (GuardianException e) {
+            assertThat(e.getErrorCode(), is(equalTo("transaction_not_found")));
+            assertThat(e.isTransactionNotFound(), is(equalTo(true)));
+            throw e;
+        }
+    }
+
+    @Test
     public void shouldThrowInvalidOTP() throws Exception {
         exception.expect(GuardianException.class);
         exception.expectMessage("Invalid OTP");

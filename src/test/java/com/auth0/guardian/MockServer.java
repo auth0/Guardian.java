@@ -47,6 +47,7 @@ public class MockServer {
     public static final String ERROR_DEVICE_ACCOUNT_NOT_FOUND = "src/test/resources/error_code_device_account_not_found.json";
     public static final String ERROR_ENROLLMENT_NOT_FOUND = "src/test/resources/error_code_enrollment_not_found.json";
     public static final String ERROR_LOGIN_TRANSACTION_NOT_FOUND = "src/test/resources/error_code_login_transaction_not_found.json";
+    public static final String ERROR_TRANSACTION_NOT_FOUND = "src/test/resources/error_code_transaction_not_found.json";
     public static final String ERROR_INVALID_TOKEN = "src/test/resources/error_code_invalid_token.json";
 
     private final MockWebServer server;
