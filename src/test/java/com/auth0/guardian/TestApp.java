@@ -28,7 +28,7 @@ public class TestApp {
 
     public static void main(String[] args) {
 
-        Guardian guardian = new Guardian("https://<tenant>.guardian.auth0.com");
+        Guardian guardian = Guardian.fromBaseUrl("https://<tenant>.guardian.auth0.com");
 
         // obtain an enrollment ticket for the user
         String enrollmentTicket = "Ag1qX7vZVBvyTKhFwrkzaCH2M8vn5b6c";

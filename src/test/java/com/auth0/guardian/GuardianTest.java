@@ -56,7 +56,7 @@ public class GuardianTest {
     @Before
     public void setUp() throws Exception {
         server = new MockServer();
-        guardian = new Guardian(server.getBaseUrl().toString());
+        guardian = Guardian.fromBaseUrl(server.getBaseUrl().toString());
     }
 
     @After
@@ -68,7 +68,7 @@ public class GuardianTest {
     public void shouldFailWithNullUrl() throws Exception {
         exception.expect(NullPointerException.class);
 
-        new Guardian(null);
+        Guardian.fromBaseUrl(null);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class GuardianTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage("Invalid base URL: some invalid URL");
 
-        new Guardian("some invalid URL");
+        Guardian.fromBaseUrl("some invalid URL");
     }
 
     @Test

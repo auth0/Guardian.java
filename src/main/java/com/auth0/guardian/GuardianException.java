@@ -35,8 +35,8 @@ public class GuardianException extends RuntimeException {
     private static final String ERROR_DEVICE_ACCOUNT_NOT_FOUND = "device_account_not_found";
     private static final String ERROR_ENROLLMENT_NOT_FOUND = "enrollment_not_found";
     private static final String ERROR_LOGIN_TRANSACTION_NOT_FOUND = "login_transaction_not_found";
-
     private static final String ERROR_ALREADY_ENROLLED = "already_enrolled";
+    private static final String ERROR_TRANSACTION_NOT_FOUND = "transaction_not_found";
 
     private final Map<String, Object> errorResponse;
     private final String errorCode;
@@ -113,6 +113,15 @@ public class GuardianException extends RuntimeException {
      */
     public boolean isAlreadyEnrolled() {
         return ERROR_ALREADY_ENROLLED.equals(errorCode);
+    }
+
+    /**
+     * Whether the error is caused by a transaction not found (e.g. already confirmed)
+     *
+     * @return true if error is caused by the transaction not found
+     */
+    public boolean isTransactionNotFound() {
+        return ERROR_TRANSACTION_NOT_FOUND.equals(errorCode);
     }
 
     @Override
