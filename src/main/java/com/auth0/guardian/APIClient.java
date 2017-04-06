@@ -26,7 +26,6 @@ import com.auth0.guardian.networking.Request;
 import com.auth0.guardian.networking.RequestFactory;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 class APIClient {
 
@@ -34,7 +33,7 @@ class APIClient {
     private final RequestFactory requestFactory;
 
     APIClient(HttpUrl baseUrl) {
-        this(baseUrl, new OkHttpClient.Builder().addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)).build());
+        this(baseUrl, new OkHttpClient());
     }
 
     APIClient(HttpUrl baseUrl, OkHttpClient client) {
