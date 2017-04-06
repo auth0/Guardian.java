@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.2.0](https://github.com/auth0/Guardian.java/tree/0.2.0) (2017-04-06)
+[Full Changelog](https://github.com/auth0/Guardian.java/compare/0.1.0...0.2.0)
+
+**Added**
+- Add transaction not found error to GuardianException [\#5](https://github.com/auth0/Guardian.java/pull/5) ([nikolaseu](https://github.com/nikolaseu))
+
+**Changed**
+- Remove HTTP logging interceptor [\#6](https://github.com/auth0/Guardian.java/pull/6) ([nikolaseu](https://github.com/nikolaseu))
+
 ## [0.1.0](https://github.com/auth0/Guardian.java/tree/0.1.0) (2017-03-24)
 [Full Changelog](https://github.com/auth0/Guardian.java/compare/0.0.1...0.1.0)
 
