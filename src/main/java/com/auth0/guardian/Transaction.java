@@ -40,12 +40,12 @@ public class Transaction implements Serializable {
 
     private String transactionToken;
     private String recoveryCode;
-    private transient String otpSecret;
+    private transient String totpSecret;
 
-    Transaction(String transactionToken, String recoveryCode, String otpSecret) {
+    Transaction(String transactionToken, String recoveryCode, String totpSecret) {
         this.transactionToken = transactionToken;
         this.recoveryCode = recoveryCode;
-        this.otpSecret = otpSecret;
+        this.totpSecret = totpSecret;
     }
 
     public String getTransactionToken() {
@@ -57,6 +57,21 @@ public class Transaction implements Serializable {
     }
 
     /**
+     * Returns the TOTP secret to be encoded in a URI for QR code generation,
+     * or manually entered if a camera is not available to the enrollment device.
+     *
+     * @return the TOTP secret
+     * @throws IllegalStateException when there is no OTP secret
+     */
+    public String getTotpSecret() throws IllegalStateException {
+        if (totpSecret == null) {
+            throw new IllegalStateException("There is no OTP Secret for this transaction");
+        }
+
+        return totpSecret;
+    }
+
+    /**
      * Returns the TOTP enrollment URI to be displayed in the QR code
      *
      * @param user   the user name or email of the account
@@ -65,16 +80,12 @@ public class Transaction implements Serializable {
      * @throws IllegalStateException when there is no OTP secret
      */
     public String totpURI(String user, String issuer) throws IllegalStateException {
-        if (otpSecret == null) {
-            throw new IllegalStateException("There is no OTP Secret for this transaction");
-        }
-
         // use HttpUrl to build the URI, java.net.URL really sucks
         return new HttpUrl.Builder()
                 .scheme("https") // HttpUrl only allows http/https so I replace it afterwards
                 .host("totp")
                 .addPathSegment(String.format("%s:%s", issuer, user))
-                .addQueryParameter("secret", otpSecret)
+                .addQueryParameter("secret", getTotpSecret())
                 .addQueryParameter("issuer", issuer)
                 .build()
                 .toString()

@@ -98,6 +98,7 @@ public class GuardianTest {
         assertThat(transaction, is(notNullValue()));
         assertThat(transaction.getTransactionToken(), is(equalTo("THE_TRANSACTION_TOKEN")));
         assertThat(transaction.getRecoveryCode(), is(equalTo("THE_RECOVERY_CODE")));
+        assertThat(transaction.getTotpSecret(), is(equalTo("THE_OTP_SECRET")));
         assertThat(transaction.totpURI("user", "issuer"), is(equalTo("otpauth://totp/issuer:user?secret=THE_OTP_SECRET&issuer=issuer")));
     }
 
@@ -130,6 +131,7 @@ public class GuardianTest {
         assertThat(transaction, is(notNullValue()));
         assertThat(transaction.getTransactionToken(), is(equalTo("THE_TRANSACTION_TOKEN")));
         assertThat(transaction.getRecoveryCode(), is(equalTo("THE_RECOVERY_CODE")));
+        assertThat(transaction.getTotpSecret(), is(equalTo("THE_OTP_SECRET")));
         assertThat(transaction.totpURI("user", "issuer"), is(equalTo("otpauth://totp/issuer:user?secret=THE_OTP_SECRET&issuer=issuer")));
     }
 
