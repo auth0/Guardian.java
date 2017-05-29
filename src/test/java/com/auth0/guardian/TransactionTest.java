@@ -46,6 +46,7 @@ public class TransactionTest {
 
         assertThat(transaction.getTransactionToken(), is(equalTo("TRANSACTION_TOKEN")));
         assertThat(transaction.getRecoveryCode(), is(equalTo("RECOVERY_CODE")));
+        assertThat(transaction.getTotpSecret(), is(equalTo("OTP_SECRET")));
         assertThat(transaction.totpURI("username", "company"), is(equalTo("otpauth://totp/company:username?secret=OTP_SECRET&issuer=company")));
     }
 
@@ -55,6 +56,7 @@ public class TransactionTest {
 
         assertThat(transaction.getTransactionToken(), is(equalTo("TRANSACTION_TOKEN")));
         assertThat(transaction.getRecoveryCode(), is(equalTo("RECOVERY_CODE")));
+        assertThat(transaction.getTotpSecret(), is(equalTo("OTP_SECRET")));
         assertThat(transaction.totpURI("user name", "company name"), is(equalTo("otpauth://totp/company%20name:user%20name?secret=OTP_SECRET&issuer=company%20name")));
     }
 
@@ -64,6 +66,7 @@ public class TransactionTest {
 
         assertThat(transaction.getTransactionToken(), is(equalTo("TRANSACTION_TOKEN")));
         assertThat(transaction.getRecoveryCode(), is(equalTo("RECOVERY_CODE")));
+        assertThat(transaction.getTotpSecret(), is(equalTo("OTP_SECRET")));
         assertThat(transaction.totpURI("user%name", "compañy?!"), is(equalTo("otpauth://totp/compa%C3%B1y%3F!:user%25name?secret=OTP_SECRET&issuer=compa%C3%B1y?!")));
     }
 
@@ -89,6 +92,32 @@ public class TransactionTest {
 
         assertThat(restoredTransaction.getTransactionToken(), is(equalTo("TRANSACTION_TOKEN")));
         assertThat(restoredTransaction.getRecoveryCode(), is(equalTo("RECOVERY_CODE")));
+    }
+
+    @Test
+    public void shouldThrowWhenRequestingOtpSecretAfterSerialization() throws Exception {
+        exception.expect(IllegalStateException.class);
+        exception.expectMessage("There is no OTP Secret for this transaction");
+
+        Transaction transaction = new Transaction("TRANSACTION_TOKEN", "RECOVERY_CODE", "OTP_SECRET");
+
+        // save
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(transaction);
+        objectOutputStream.close();
+        outputStream.close();
+
+        byte[] binaryData = outputStream.toByteArray();
+
+        // restore
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(binaryData);
+        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        Transaction restoredTransaction = (Transaction) objectInputStream.readObject();
+        objectInputStream.close();
+        inputStream.close();
+
+        restoredTransaction.getTotpSecret();
     }
 
     @Test
