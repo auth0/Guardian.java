@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.3.0](https://github.com/auth0/Guardian.java/tree/0.3.0) (2017-05-29)
+[Full Changelog](https://github.com/auth0/Guardian.java/compare/0.2.0...0.3.0)
+
+**Added**
+- Exposed OTP secret for not-yet serialised Transaction entities [\#8](https://github.com/auth0/Guardian.java/pull/8) ([mirichan](https://github.com/mirichan))
+
 ## [0.2.0](https://github.com/auth0/Guardian.java/tree/0.2.0) (2017-04-06)
 [Full Changelog](https://github.com/auth0/Guardian.java/compare/0.1.0...0.2.0)
 
