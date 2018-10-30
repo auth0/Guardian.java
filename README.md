@@ -149,7 +149,7 @@ Auth0 helps you to:
 ## Create a free Auth0 Account
 
 1. Go to [Auth0](https://auth0.com) and click Sign Up.
-2. Use Google, GitHub or Microsoft Account to login.
+2. Use your email, Google, GitHub or Microsoft Account to login.
 
 ## Issue Reporting
 
