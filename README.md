@@ -28,7 +28,7 @@ compile 'com.auth0:guardian:0.3.0'
 
 ## Usage
 
-Create an instance of `Guardian` using you Guardian URL:
+Create an instance of `Guardian` using your Guardian URL:
 
 ```java
 Guardian guardian = new Guardian("https://<tenant>.guardian.auth0.com");
@@ -162,7 +162,6 @@ If you have found a bug or if you have a feature request, please report them at 
 ## License
 
 This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.
-
 
 <!-- Vars -->
 
