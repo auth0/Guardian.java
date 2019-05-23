@@ -1,6 +1,6 @@
 # Guardian Java
 
-[![Build][travis-ci-badge]][travis-ci-url]
+[![CircleCI](circle-ci-badge)](circle-ci-url)
 [![MIT][mit-badge]][mit-url]
 [![Maven][maven-badge]][maven-url]
 [![JCenter][jcenter-badge]][jcenter-url]
@@ -166,8 +166,8 @@ This project is licensed under the MIT license. See the [LICENSE](LICENSE) file 
 
 <!-- Vars -->
 
-[travis-ci-badge]: https://travis-ci.org/auth0/Guardian.java.svg?branch=master
-[travis-ci-url]: https://travis-ci.org/auth0/Guardian.java
+[circle-ci-badge]: https://img.shields.io/circleci/project/github/auth0/Guardian.java.svg?style=flat-square
+[circle-ci-url]: https://circleci.com/gh/auth0/Guardian.java/tree/master
 [mit-badge]: http://img.shields.io/:license-mit-blue.svg?style=flat
 [mit-url]: https://raw.githubusercontent.com/auth0/Guardian.java/master/LICENSE
 [maven-badge]: https://img.shields.io/maven-central/v/com.auth0/guardian.svg
