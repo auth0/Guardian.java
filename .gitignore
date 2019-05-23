@@ -102,7 +102,7 @@ gradle-app.setting
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
-# Gradle:
+# Gradle:w
 .idea/gradle.xml
 .idea/libraries
 
@@ -111,6 +111,10 @@ gradle-app.setting
 
 ## File-based project format:
 *.iws
+
+# IntelliJ
+out/
+
 
 ### Intellij+iml Patch ###
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023

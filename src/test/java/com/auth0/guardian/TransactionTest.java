@@ -67,7 +67,7 @@ public class TransactionTest {
         assertThat(transaction.getTransactionToken(), is(equalTo("TRANSACTION_TOKEN")));
         assertThat(transaction.getRecoveryCode(), is(equalTo("RECOVERY_CODE")));
         assertThat(transaction.getTotpSecret(), is(equalTo("OTP_SECRET")));
-        assertThat(transaction.totpURI("user%name", "compañy?!"), is(equalTo("otpauth://totp/compa%C3%B1y%3F!:user%25name?secret=OTP_SECRET&issuer=compa%C3%B1y?!")));
+        assertThat(transaction.totpURI("user%name", "compañy?!"), is(equalTo("otpauth://totp/compa%C3%B1y%3F!:user%25name?secret=OTP_SECRET&issuer=compa%C3%B1y%3F%21")));
     }
 
     @Test
