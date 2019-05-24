@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.3.1](https://github.com/auth0/Guardian.java/tree/0.3.1) (2019-05-24)
+[Full Changelog](https://github.com/auth0/Guardian.java/compare/0.3.0...0.3.1)
+
+**Security**
+- Update dependencies (jackson-databind, okhttp, oss plugin) [\#10](https://github.com/auth0/Guardian.java/pull/10) ([lbalmaceda](https://github.com/lbalmaceda))
+
 ## [0.3.0](https://github.com/auth0/Guardian.java/tree/0.3.0) (2017-05-29)
 [Full Changelog](https://github.com/auth0/Guardian.java/compare/0.2.0...0.3.0)
 
