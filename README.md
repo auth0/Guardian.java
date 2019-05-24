@@ -1,6 +1,6 @@
 # Guardian Java
 
-[![CircleCI](circle-ci-badge)](circle-ci-url)
+[![CircleCI][circle-ci-badge]][circle-ci-url]
 [![MIT][mit-badge]][mit-url]
 [![Maven][maven-badge]][maven-url]
 [![JCenter][jcenter-badge]][jcenter-url]
