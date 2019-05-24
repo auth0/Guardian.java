@@ -1,6 +1,6 @@
 # Guardian Java
 
-[![CircleCI](circle-ci-badge)](circle-ci-url)
+[![CircleCI][circle-ci-badge]][circle-ci-url]
 [![MIT][mit-badge]][mit-url]
 [![Maven][maven-badge]][maven-url]
 [![JCenter][jcenter-badge]][jcenter-url]
@@ -16,14 +16,14 @@ Get Guardian Java via Maven:
 <dependency>
   <groupId>com.auth0</groupId>
   <artifactId>guardian</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
 </dependency>
 ```
 
 or Gradle:
 
 ```gradle
-compile 'com.auth0:guardian:0.3.0'
+implementation 'com.auth0:guardian:0.3.1'
 ```
 
 ## Usage
