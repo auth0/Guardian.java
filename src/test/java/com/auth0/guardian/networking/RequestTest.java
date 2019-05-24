@@ -81,6 +81,7 @@ public class RequestTest {
                     .url("https://example.com/")
                     .build())
             .protocol(Protocol.HTTP_1_1)
+            .message("")
             .code(200)
             .body(ResponseBody.create(MEDIA_TYPE, "{}"))
             .build();
@@ -90,6 +91,7 @@ public class RequestTest {
                     .url("https://example.com/")
                     .build())
             .protocol(Protocol.HTTP_1_1)
+            .message("")
             .code(401)
             .body(ResponseBody.create(MEDIA_TYPE, "{}"))
             .build();
