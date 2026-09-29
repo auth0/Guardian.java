@@ -1,6 +1,5 @@
 group = 'com.auth0'
 
-apply plugin: "com.jfrog.bintray"
 apply plugin: "com.auth0.gradle.oss-library.java"
 apply plugin: "jacoco"
 
@@ -43,7 +42,6 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "gradle.plugin.com.auth0.gradle:oss-library:0.9.0"
     }
 }
